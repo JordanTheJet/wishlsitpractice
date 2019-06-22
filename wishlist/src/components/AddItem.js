@@ -6,8 +6,8 @@ class AddItem extends React.Component {
         super(props)
         this.state = {
             itemInput : "",
-            availableArray : ["item one", "item two", "item three"],
-            wishListArray : ["item one", "item two"],
+            availableArray : [],
+            wishListArray : [],
         }
     }
     inputChange=(e)=>{
@@ -25,17 +25,24 @@ class AddItem extends React.Component {
         })
     }
     addToWishList=(item)=>{
-        this.setState({
-            wishListArray: [...this.state.wishListArray, item]
-        })
-    }
-    removeFromWishList=(item)=>{
-        let arr = [...this.state.wishListArray]
+        let arr = [...this.state.availableArray]
         let index = this.state.availableArray.indexOf(item)
         arr.splice(index, 1)
         this.setState({
-            wishListArray: arr
+            availableArray: arr,
+            wishListArray: [...this.state.wishListArray, item]        
         })
+    }
+    removeFromWishList=(item)=>{
+
+        let arr = [...this.state.wishListArray]
+        let index = this.state.wishListArray.indexOf(item)
+        arr.splice(index, 1)
+        this.setState({
+            wishListArray: arr,
+            availableArray: [...this.state.availableArray, item]
+        })
+
     }
     render(){
         return(
@@ -44,8 +51,8 @@ class AddItem extends React.Component {
             <input onChange={this.inputChange}></input><button onClick = {this.addToAvailable}>Add to Availble</button>
 
             <ul>
-                {this.state.availableArray.map(item => 
-                    <div><li>{item}</li> <button onClick = {()=>this.addToWishList(item)}>Add to Wishlist</button>
+                {this.state.availableArray.map((item,index) => 
+                    <div><li key={index}>{item}</li> <button onClick = {()=>this.addToWishList(item)}>Add to Wishlist</button>
                     </div>
                     )}
             </ul>
@@ -54,8 +61,8 @@ class AddItem extends React.Component {
             <div>My Wish List{this.state.wishListArray.length}
 
             <ul>
-                {this.state.wishListArray.map(item => 
-                    <div><li>{item}</li> <button onClick = {()=>this.removeFromWishList(item)}>Remove from Wish List</button>
+                {this.state.wishListArray.map((item, index) => 
+                    <div><li key={index}>{item}</li> <button onClick = {()=>this.removeFromWishList(item)}>Remove from Wish List</button>
                     </div>
                     )}
             </ul>
